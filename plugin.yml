@@ -1,0 +1,19 @@
+name: ServerAiOptimizer
+version: 2.5
+main: org.nyxiikcz.aioptimizer.ServerAiOptimizer
+api-version: 1.20
+authors: [nyxiikcz]
+softdepend: [PlaceholderAPI]
+description: Intelligent AI for server performance optimization, entity management, and redstone control.
+
+commands:
+  ai:
+    description: Main control command for AI Optimizer.
+    usage: /ai <status|clear|inspect|bossbar|serverinfo|help|reload>
+    permission: ai.admin
+    aliases: [aio, optimizer]
+
+permissions:
+  ai.admin:
+    description: Grants full access to AI Optimizer commands.
+    default: op

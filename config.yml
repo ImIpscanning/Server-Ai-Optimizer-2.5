@@ -1,0 +1,217 @@
+# =============================================================
+#   MINECRAFT AI OPTIMIZER - CONFIGURATION
+#   Version: 2.5
+# =============================================================
+
+# -------------------------------------------------------------
+# GLOBAL SETTINGS
+# -------------------------------------------------------------
+
+settings:
+  # How often the AI checks server status (in ticks).
+  # ACTION: Every 100 ticks (5 seconds), the plugin measures TPS and RAM.
+  # WARNING: Do not set lower than 60 (3 seconds).
+  check-interval: 100
+
+  # Prefix displayed before chat messages.
+  prefix: "&8[&bAI-Core&8] &7"
+
+  # Detailed console logging.
+  # ACTION: If 'true', the plugin will log everything it does to the console.
+  verbose-logging: true
+
+# ==========================================
+# WEB DASHBOARD (Live statistics in browser)
+# ==========================================
+web-dashboard:
+  enabled: true
+  port: 8080
+  username: "admin"
+  password: "password123"
+
+# -------------------------------------------------------------
+# 1. STRESS SCORE (STRESS THRESHOLDS)
+# -------------------------------------------------------------
+# Here you set the % of total load at which the measures are activated.
+# Stress Score (0-100%) is calculated automatically from RAM, CPU, TPS and MSPT.
+stress-thresholds:
+
+  # Phase 1: Mild - Preventive Actions
+  # (Reduce visibility, stop terrain generation)
+  mild: 45
+
+  # Phase 2: High - Game Restrictions
+  # (No monster spawning, AI range restrictions)
+  high: 75
+
+  # Phase 3: Critical - Server Rescue
+  # (Aggressive Delete, Server Freeze, Physics Shutdown)
+  critical: 90
+
+# -------------------------------------------------------------
+# 2. ENTITY BRAIN (MOB & ITEM MANAGEMENT)
+# -------------------------------------------------------------
+entity-optimizer:
+  # Master switch for the entire entity section.
+  master-enabled: true
+
+  # --- Smart Item Clear ---
+  smart-clear:
+    # ACTION: Enables automatic removal of items on the ground.
+    enabled: true
+    # Interval in seconds (how often to clear).
+    interval: 300
+    # Whitelist (Items that will NEVER be deleted).
+    whitelist:
+      - "DIAMOND"
+      - "NETHERITE_INGOT"
+      - "ENCHANTED_BOOK"
+      - "BEACON"
+      - "SHULKER_BOX"
+      - "TOTEM_OF_UNDYING"
+    # Warn players before clearing.
+    warnings: true
+
+  # --- Projectile Cleaner ---
+  projectile-cleaner:
+    # ACTION: Enables projectile cleaning.
+    enabled: true
+    # ACTION: Removes arrows stuck in the ground/walls.
+    remove-arrows-on-ground: true
+    # ACTION: Removes tridents (Default: false).
+    remove-tridents: false
+
+  # --- AI Lobotomy (Disabling Mob Intelligence) ---
+  ai-suppressor:
+    # ACTION: Enables the lobotomy system (AI disabler).
+    enabled: true
+    # Hard Distance: Mobs further than 48 blocks won't move at all (statues).
+    hard-distance: 48
+    # Soft Distance: Mobs further than 24 blocks think less frequently.
+    soft-distance: 24
+    # Ignored mobs (Bosses, etc.).
+    ignored-mobs:
+      - "ENDER_DRAGON"
+      - "WITHER"
+      - "VILLAGER"
+
+  # --- Anti-Cluster (Farm Protection) ---
+  anti-cluster:
+    # ACTION: Enables reduction of mobs in small areas.
+    enabled: true
+    # Mob limit per chunk (excess mobs are removed).
+    max-mobs-per-chunk: 50
+    # Disable collisions (huge CPU saver).
+    disable-collisions: true
+
+  # --- Villager Optimizer (Trading Halls) ---
+  villager-optimizer:
+    # ACTION: Optimizes villagers in trading halls (removes AI if stuck).
+    enabled: true
+
+# -------------------------------------------------------------
+# 3. REDSTONE & PHYSICS (THE ENGINEER)
+# -------------------------------------------------------------
+redstone-optimizer:
+  # Master switch for the redstone section.
+  master-enabled: true
+
+  # --- Physics Freeze ---
+  physics-freeze:
+    # ACTION: Enables physics disabling during low TPS.
+    enabled: true
+    # ACTION: Stops fire spread.
+    disable-fire-spread: true
+    # ACTION: Stops leaves from decaying.
+    disable-leaf-decay: true
+    # ACTION: Stops redstone (Risky for farms).
+    freeze-redstone-on-critical: false
+
+  # --- Clock Detector ---
+  clock-detector:
+    # ACTION: Scans for redstone circuits that blink too fast.
+    enabled: true
+    # Pulse limit per second.
+    max-pulses-per-second: 20
+    # Action: "LOG", "BREAK", "FREEZE".
+    action: "FREEZE"
+
+# -------------------------------------------------------------
+# 4. WORLD MANAGER
+# -------------------------------------------------------------
+world-manager:
+  # Master switch for world management.
+  master-enabled: true
+
+  # --- Dynamic View Distance ---
+  dynamic-view:
+    # ACTION: Enables changing view distance based on TPS.
+    enabled: true
+    max-view: 10
+    min-view: 4
+    change-rate-seconds: 30
+
+  # --- Chunk Cleaner ---
+  chunk-cleaner:
+    # ACTION: More aggressive chunk unloading.
+    enabled: true
+    # Unload chunk from RAM if unused for 30s.
+    unload-unused-after-seconds: 30
+
+# -------------------------------------------------------------
+# 5. MESSAGES
+# -------------------------------------------------------------
+messages:
+  clear-warning: "&cWARNING! Items on the ground will be deleted after &e%time%s&c!"
+  items-cleared: "&aAI removed &e%count% &aitems."
+  command-no-perm: "&cYou do not have permission to use this command."
+  manual-cleanup-success: "&a✔ Successfully deleted &e%count% &aentit."
+  manual-cleanup-fail: "&c✖ No unnecessary entities were found."
+
+# -------------------------------------------------------------
+# 6. DATABASE (MYSQL LOGGING)
+# -------------------------------------------------------------
+database:
+  enabled: false
+  # How often to save data (in seconds). I recommend the 10s - 15s.
+  log-interval: 10
+  server-name: "ServerName"
+
+  host: "localhost"
+  port: 3306
+  database: "minecraft_server"
+  username: "root"
+  password: "password"
+
+# -------------------------------------------------------------
+# 7. UPDATE CHECKER
+# -------------------------------------------------------------
+update-checker:
+  # If true, the plugin will check for a new version on startup.
+  enabled: true
+
+# -------------------------------------------------------------
+# 8. AUTO RESTART SYSTEM
+# -------------------------------------------------------------
+auto-restart:
+  # ACTION: Enables automatic server restarts at scheduled times.
+  enabled: true
+
+  # Times when the server should restart (Format HH:mm in 24h).
+  times:
+    - "04:00"
+    - "16:00"
+
+  # Countdown warnings in seconds (When to broadcast message).
+  warnings: [600, 300, 60, 30, 10, 5, 4, 3, 2, 1]
+
+  # Commands executed by console during restart sequence.
+  commands:
+    - "save-all"
+    - "restart"
+
+  # Messages specifically for the restart system.
+  messages:
+    warning: "&c⚠ Server will restart in &e%time%&c."
+    kick-message: "&cServer is restarting for maintenance.\nPlease rejoin in a moment."
+    actionbar: "&cRestart in: &e%time%"
